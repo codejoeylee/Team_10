@@ -18,3 +18,13 @@ Tailwind CSS is configured (Tailwind v2). This scaffold uses the Pages Router.
 ## Notes
 - Replace the placeholder components and content with your real product and artisan data.
 - This repository is intentionally minimal so you can extend it for your project requirements.
+
+# Team_10
+
+## 👥 Group Members
+
+1. **Benjamin Asante**  
+2. **Tsitsi Mutsvedu**  
+3. **RIRIKU SHIRAKAWA**  
+4. **John Munina Munina**  
+5. **Blandine Lusamba Bukasa**
