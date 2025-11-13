@@ -1,5 +1,8 @@
 import Head from 'next/head';
 
+{/*We will move all the components into it own folder */}
+
+
 // --- MOCK DATA ---
 const mockProducts = [
   { id: 1, name: 'Handwoven Tote Bag', price: 85.00, rating: 5 },
@@ -103,10 +106,7 @@ export default function MarketplacePage() {
         <title>Handcrafted Haven Marketplace</title>
       </Head>
 
-      {/* 🛑 Navigation Bar: Removed redundant max-w-7xl from inside the nav 
-           and ensured it uses the correct flex properties. This section is now 
-           correctly aligned across the top of the page.
-      */}
+      {/*Navigation bar*/}
       <nav className="py-6 px-4 sm:px-12 border-b border-stone-100">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
             <div className="text-2xl font-serif font-semibold text-stone-900">
