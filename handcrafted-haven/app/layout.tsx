@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import './ui/global.css';
 import Navbar from './ui/homepage/navbar';
- 
 export const metadata: Metadata = {
   title: {
     template: '%s | Handcrafted Dashboard',
