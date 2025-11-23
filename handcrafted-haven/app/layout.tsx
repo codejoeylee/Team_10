@@ -4,10 +4,10 @@ import Navbar from './ui/homepage/navbar';
  
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme Dashboard',
-    default: 'Acme Dashboard',
+    template: '%s | Handcrafted Dashboard',
+    default: 'Handcrafted Haven Dashboard',
   },
-  description: 'The official Next.js Learn Dashboard built with App Router.',
+  description: 'Handcrafted Haven,a marketplace of vintage, hand-hewn goods.',
   metadataBase: new URL('https://next-learn-dashboard.vercel.sh'),
 };
 
