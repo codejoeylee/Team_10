@@ -16,7 +16,30 @@ export default function DashboardPage() {
         if (userData) {
             setUser(JSON.parse(userData));
         }
+        fetchStats();
     }, []);
+
+    const fetchStats = async () => {
+        try {
+            const response = await fetch('/api/products');
+            const data = await response.json();
+
+            if (data.success) {
+                const products = data.products;
+                const totalProducts = products.length;
+                const activeProducts = products.filter((p: any) => p.is_active || p.isActive).length;
+
+                setStats({
+                    totalProducts,
+                    activeProducts,
+                    totalViews: 0, // You can implement view tracking later
+                    totalSales: 0, // You can implement sales tracking later
+                });
+            }
+        } catch (err) {
+            console.error('Failed to fetch stats');
+        }
+    };
 
     return (
         <div className="p-6">
