@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import './ui/global.css';
-import Navbar from './ui/homepage/navbar';
+import { CartProvider } from './context/CartContext';
+
 export const metadata: Metadata = {
   title: {
     template: '%s | Handcrafted Dashboard',
@@ -17,7 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <CartProvider>
+          {children}
+        </CartProvider>
+      </body>
     </html>
   );
 }

@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 
 // ---GUYS STATIC DATA ---
@@ -159,9 +160,9 @@ export default function MarketplacePage() {
             Handcrafted Haven
           </div>
           <div className="flex space-x-8 text-lg font-medium text-stone-700">
-            <a href="#" className="hover:text-stone-900">Shop</a>
-            <a href="#" className="hover:text-stone-900">Category</a>
-            <a href="#" className="hover:text-stone-900">Log In</a>
+            <Link href="/shop" className="hover:text-stone-900">Shop</Link>
+            <Link href="/shop" className="hover:text-stone-900">Category</Link>
+            <Link href="/login" className="hover:text-stone-900">Log In</Link>
           </div>
         </div>
       </nav>
@@ -183,9 +184,11 @@ export default function MarketplacePage() {
             <p className="text-xl text-stone-600">
               A marketplace of <span className="font-semibold text-amber-900 italic">vintage, hand-hewn goods.</span>
             </p>
-            <button className="w-fit px-8 py-3 bg-amber-900 text-white font-medium rounded-lg hover:bg-amber-800 transition duration-150 shadow-md">
-              explore categories
-            </button>
+            <Link href="/shop">
+              <button className="w-fit px-8 py-3 bg-amber-900 text-white font-medium rounded-lg hover:bg-amber-800 transition duration-150 shadow-md">
+                explore categories
+              </button>
+            </Link>
           </div>
 
           {/* Hero Image */}

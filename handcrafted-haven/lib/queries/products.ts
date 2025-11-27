@@ -48,52 +48,35 @@ export async function getAllProducts(limit = 50, offset = 0): Promise<Product[]>
 }
 
 export async function updateProduct(id: string, data: UpdateProduct): Promise<Product | null> {
-  const setParts: string[] = [];
-  const values: any[] = [];
-  let paramCount = 1;
+  // Build update fields dynamically
+  const updates: any = {};
 
-  if (data.name !== undefined) {
-    setParts.push(`name = $${paramCount++}`);
-    values.push(data.name);
-  }
-  if (data.description !== undefined) {
-    setParts.push(`description = $${paramCount++}`);
-    values.push(data.description);
-  }
-  if (data.price !== undefined) {
-    setParts.push(`price = $${paramCount++}`);
-    values.push(data.price);
-  }
-  if (data.category !== undefined) {
-    setParts.push(`category = $${paramCount++}`);
-    values.push(data.category);
-  }
-  if (data.imageUrl !== undefined) {
-    setParts.push(`image_url = $${paramCount++}`);
-    values.push(data.imageUrl);
-  }
-  if (data.stock !== undefined) {
-    setParts.push(`stock = $${paramCount++}`);
-    values.push(data.stock);
-  }
-  if (data.isActive !== undefined) {
-    setParts.push(`is_active = $${paramCount++}`);
-    values.push(data.isActive);
-  }
+  if (data.name !== undefined) updates.name = data.name;
+  if (data.description !== undefined) updates.description = data.description;
+  if (data.price !== undefined) updates.price = data.price;
+  if (data.category !== undefined) updates.category = data.category;
+  if (data.imageUrl !== undefined) updates.image_url = data.imageUrl;
+  if (data.stock !== undefined) updates.stock = data.stock;
+  if (data.isActive !== undefined) updates.is_active = data.isActive;
 
-  if (setParts.length === 0) return null;
+  if (Object.keys(updates).length === 0) return null;
 
-  setParts.push('updated_at = NOW()');
-  values.push(id);
+  // Use Vercel Postgres tagged template for update
+  const result = await sql`
+    UPDATE products 
+    SET 
+      name = COALESCE(${updates.name || null}, name),
+      description = COALESCE(${updates.description || null}, description),
+      price = COALESCE(${updates.price || null}, price),
+      category = COALESCE(${updates.category || null}, category),
+      image_url = COALESCE(${updates.image_url || null}, image_url),
+      stock = COALESCE(${updates.stock !== undefined ? updates.stock : null}, stock),
+      is_active = COALESCE(${updates.is_active !== undefined ? updates.is_active : null}, is_active),
+      updated_at = NOW()
+    WHERE id = ${id}
+    RETURNING *
+  `;
 
-  const query = `
-        UPDATE products 
-        SET ${setParts.join(', ')}
-        WHERE id = $${paramCount}
-        RETURNING *
-    `;
-
-  const result = await sql.query(query, values);
   return (result.rows[0] as Product) || null;
 }
 
