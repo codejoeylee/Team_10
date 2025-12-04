@@ -1,5 +1,9 @@
+'use client';
+
 import Head from 'next/head';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 
 // ---GUYS STATIC DATA ---
@@ -147,6 +151,21 @@ const Footer = () => (
 
 // --- MAIN PAGE COMPONENT ---
 export default function MarketplacePage() {
+  const router = useRouter();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    router.push('/');
+  };
+
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Head>
@@ -162,7 +181,13 @@ export default function MarketplacePage() {
           <div className="flex space-x-8 text-lg font-medium text-stone-700">
             <Link href="/shop" className="hover:text-stone-900">Shop</Link>
             <Link href="/shop" className="hover:text-stone-900">Category</Link>
-            <Link href="/login" className="hover:text-stone-900">Log In</Link>
+            {isLoggedIn ? (
+              <button onClick={handleLogout} className="hover:text-stone-900">
+                Logout
+              </button>
+            ) : (
+              <Link href="/login" className="hover:text-stone-900">Log In</Link>
+            )}
           </div>
         </div>
       </nav>

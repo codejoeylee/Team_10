@@ -59,6 +59,27 @@ export const CreateProductSchema = ProductSchema.omit({
 
 export const UpdateProductSchema = CreateProductSchema.partial();
 
+
+// Review schemas
+export const ReviewSchema = z.object({
+    id: z.string().uuid(),
+    productId: z.string().uuid(),
+    userId: z.string().uuid(),
+    rating: z.number().int().min(1).max(5),
+    comment: z.string().optional(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+});
+
+export const CreateReviewSchema = ReviewSchema.omit({
+    id: true,
+    createdAt: true,
+    updatedAt: true
+});
+
+
+
+
 // Type exports
 export type User = z.infer<typeof UserSchema>;
 export type CreateUser = z.infer<typeof CreateUserSchema>;
@@ -68,3 +89,5 @@ export type CreateSellerProfile = z.infer<typeof CreateSellerProfileSchema>;
 export type Product = z.infer<typeof ProductSchema>;
 export type CreateProduct = z.infer<typeof CreateProductSchema>;
 export type UpdateProduct = z.infer<typeof UpdateProductSchema>;
+export type Review = z.infer<typeof ReviewSchema>;
+export type CreateReview = z.infer<typeof CreateReviewSchema>;

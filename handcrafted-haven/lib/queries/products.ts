@@ -14,7 +14,18 @@ export async function createProduct(data: CreateProduct): Promise<Product> {
       ${data.stock}, 
       ${data.isActive}
     )
-    RETURNING *
+    RETURNING 
+      id, 
+      seller_id as "sellerId", 
+      name, 
+      description, 
+      price, 
+      category, 
+      image_url as "imageUrl", 
+      stock, 
+      is_active as "isActive", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt"
   `;
 
   return result.rows[0] as Product;
@@ -22,7 +33,21 @@ export async function createProduct(data: CreateProduct): Promise<Product> {
 
 export async function getProductById(id: string): Promise<Product | null> {
   const result = await sql`
-    SELECT * FROM products WHERE id = ${id} LIMIT 1
+    SELECT 
+      id, 
+      seller_id as "sellerId", 
+      name, 
+      description, 
+      price, 
+      category, 
+      image_url as "imageUrl", 
+      stock, 
+      is_active as "isActive", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt"
+    FROM products 
+    WHERE id = ${id} 
+    LIMIT 1
   `;
 
   return (result.rows[0] as Product) || null;
@@ -30,7 +55,21 @@ export async function getProductById(id: string): Promise<Product | null> {
 
 export async function getProductsBySeller(sellerId: string): Promise<Product[]> {
   const result = await sql`
-    SELECT * FROM products WHERE seller_id = ${sellerId} ORDER BY created_at DESC
+    SELECT 
+      id, 
+      seller_id as "sellerId", 
+      name, 
+      description, 
+      price, 
+      category, 
+      image_url as "imageUrl", 
+      stock, 
+      is_active as "isActive", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt"
+    FROM products 
+    WHERE seller_id = ${sellerId} 
+    ORDER BY created_at DESC
   `;
 
   return result.rows as Product[];
@@ -38,7 +77,19 @@ export async function getProductsBySeller(sellerId: string): Promise<Product[]> 
 
 export async function getAllProducts(limit = 50, offset = 0): Promise<Product[]> {
   const result = await sql`
-    SELECT * FROM products 
+    SELECT 
+      id, 
+      seller_id as "sellerId", 
+      name, 
+      description, 
+      price, 
+      category, 
+      image_url as "imageUrl", 
+      stock, 
+      is_active as "isActive", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt"
+    FROM products 
     WHERE is_active = true 
     ORDER BY created_at DESC 
     LIMIT ${limit} OFFSET ${offset}
@@ -74,7 +125,18 @@ export async function updateProduct(id: string, data: UpdateProduct): Promise<Pr
       is_active = COALESCE(${updates.is_active !== undefined ? updates.is_active : null}, is_active),
       updated_at = NOW()
     WHERE id = ${id}
-    RETURNING *
+    RETURNING 
+      id, 
+      seller_id as "sellerId", 
+      name, 
+      description, 
+      price, 
+      category, 
+      image_url as "imageUrl", 
+      stock, 
+      is_active as "isActive", 
+      created_at as "createdAt", 
+      updated_at as "updatedAt"
   `;
 
   return (result.rows[0] as Product) || null;

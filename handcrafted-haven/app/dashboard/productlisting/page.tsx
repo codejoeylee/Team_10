@@ -95,15 +95,19 @@ export default function ProductListingPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const productData = {
+        const productData: any = {
             name: formData.name,
             description: formData.description,
             price: parseFloat(formData.price),
             category: formData.category,
-            imageUrl: formData.imageUrl,
             stock: parseInt(formData.stock),
             isActive: formData.isActive,
         };
+
+        // Only include imageUrl if it has a value
+        if (formData.imageUrl && formData.imageUrl.trim() !== '') {
+            productData.imageUrl = formData.imageUrl;
+        }
 
         try {
             const url = editingProduct ? `/api/products/${editingProduct.id}` : '/api/products';

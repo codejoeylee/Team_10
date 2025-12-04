@@ -11,18 +11,56 @@ export default function CartPage() {
         return (
             <div className="min-h-screen bg-white dark:bg-stone-900">
                 {/* Navigation */}
-                <nav className="py-6 px-4 sm:px-12 border-b border-stone-100 dark:border-stone-800">
+                <nav className="py-4 sm:py-6 px-4 sm:px-12 border-b border-stone-100 dark:border-stone-800">
                     <div className="flex justify-between items-center max-w-7xl mx-auto">
-                        <Link href="/" className="text-2xl font-serif font-semibold text-stone-900 dark:text-stone-100">
+                        <Link href="/" className="text-xl sm:text-2xl font-serif font-semibold text-stone-900 dark:text-stone-100">
                             Handcrafted Haven
                         </Link>
-                        <div className="flex space-x-8 text-lg font-medium text-stone-700 dark:text-stone-300">
-                            <Link href="/shop" className="hover:text-stone-900 dark:hover:text-stone-100">Shop</Link>
-                            <Link href="/cart" className="hover:text-stone-900 dark:hover:text-stone-100">Cart</Link>
-                            <Link href="/login" className="hover:text-stone-900 dark:hover:text-stone-100">Log In</Link>
+                        <div className="flex space-x-4 sm:space-x-8 text-base sm:text-lg font-medium text-stone-700 dark:text-stone-300">
+                            <Link href="/shop" className="hover:text-stone-900 dark:hover:text-stone-100">
+                                <span className="hidden sm:inline">Shop</span>
+                                <svg className="w-6 h-6 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                </svg>
+                            </Link>
+                            <Link href="/cart" className="hover:text-stone-900 dark:hover:text-stone-100 relative">
+                                <span className="hidden sm:inline">Cart</span>
+                                <svg className="w-6 h-6 sm:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                                </svg>
+                                {cartCount > 0 && (
+                                    <span className="absolute -top-2 -right-2 bg-amber-900 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </Link>
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem('token');
+                                    localStorage.removeItem('user');
+                                    router.push('/login');
+                                }}
+                                className="hover:text-stone-900 dark:hover:text-stone-100 hidden sm:block"
+                            >
+                                Logout
+                            </button>
+                            <button
+                                onClick={() => {
+                                    localStorage.removeItem('token');
+                                    localStorage.removeItem('user');
+                                    router.push('/login');
+                                }}
+                                className="hover:text-stone-900 dark:hover:text-stone-100 sm:hidden"
+                                aria-label="Logout"
+                            >
+                                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 </nav>
+
 
                 {/* Empty Cart */}
                 <div className="max-w-7xl mx-auto px-4 sm:px-12 py-16 text-center">
