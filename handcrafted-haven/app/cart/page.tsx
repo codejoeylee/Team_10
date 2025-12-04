@@ -2,9 +2,10 @@
 
 import { useCart } from '../context/CartContext';
 import Link from 'next/link';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function CartPage() {
+    const router = useRouter();
     const { cart, removeFromCart, updateQuantity, clearCart, cartTotal, cartCount } = useCart();
 
     if (cart.length === 0) {
