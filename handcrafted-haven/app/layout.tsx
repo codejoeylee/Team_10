@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import './ui/global.css';
 import { CartProvider } from './context/CartContext';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: {
@@ -22,6 +23,7 @@ export default function RootLayout({
         <CartProvider>
           {children}
         </CartProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
