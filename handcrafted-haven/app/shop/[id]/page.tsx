@@ -23,11 +23,20 @@ interface Review {
     created_at: string;
 }
 
+interface Seller {
+    businessName: string;
+    bio: string;
+    location: string;
+    specialty: string;
+    imageUrl: string;
+}
+
 export default function ProductDetailPage() {
     const params = useParams();
     const router = useRouter();
     const { addToCart, cartCount } = useCart();
     const [product, setProduct] = useState<Product | null>(null);
+    const [seller, setSeller] = useState<Seller | null>(null);
     const [reviews, setReviews] = useState<Review[]>([]);
     const [loading, setLoading] = useState(true);
     const [quantity, setQuantity] = useState(1);
@@ -38,6 +47,7 @@ export default function ProductDetailPage() {
     useEffect(() => {
         if (params.id) {
             fetchProduct(params.id as string);
+            fetchSeller(params.id as string);
             fetchReviews(params.id as string);
         }
     }, [params.id]);
@@ -54,6 +64,19 @@ export default function ProductDetailPage() {
             console.error('Failed to fetch product');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchSeller = async (productId: string) => {
+        try {
+            const response = await fetch(`/api/products/${productId}/seller`);
+            const data = await response.json();
+
+            if (data.success) {
+                setSeller(data.seller);
+            }
+        } catch (err) {
+            console.error('Failed to fetch seller info');
         }
     };
 
@@ -277,6 +300,44 @@ export default function ProductDetailPage() {
                                 {product.description || 'This beautiful handcrafted item is made with care and attention to detail.'}
                             </p>
                         </div>
+
+                        {/* Seller Info */}
+                        {seller && (
+                            <div className="mb-8 p-4 bg-stone-50 dark:bg-stone-800 rounded-lg border border-stone-200 dark:border-stone-700">
+                                <h2 className="text-xl font-semibold text-stone-900 dark:text-stone-100 mb-3">
+                                    About the Artisan
+                                </h2>
+                                <div className="flex items-start gap-4">
+                                    {seller.imageUrl && (
+                                        <img
+                                            src={seller.imageUrl}
+                                            alt={seller.businessName}
+                                            className="w-16 h-16 rounded-full object-cover"
+                                        />
+                                    )}
+                                    <div className="flex-1">
+                                        <h3 className="font-semibold text-lg text-stone-900 dark:text-stone-100">
+                                            {seller.businessName}
+                                        </h3>
+                                        {seller.location && (
+                                            <p className="text-sm text-stone-600 dark:text-stone-400 mb-2">
+                                                📍 {seller.location}
+                                            </p>
+                                        )}
+                                        {seller.specialty && (
+                                            <p className="text-sm text-amber-900 dark:text-amber-500 mb-2">
+                                                Specialty: {seller.specialty}
+                                            </p>
+                                        )}
+                                        {seller.bio && (
+                                            <p className="text-sm text-stone-600 dark:text-stone-300 mt-2">
+                                                {seller.bio}
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Quantity Selector */}
                         <div className="mb-6">

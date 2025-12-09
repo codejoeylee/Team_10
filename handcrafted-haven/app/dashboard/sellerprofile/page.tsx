@@ -39,6 +39,9 @@ export default function SellerProfilePage() {
 
             if (data.success) {
                 setProfile(data.profile);
+            } else if (response.status === 404) {
+                // Profile doesn't exist yet, that's okay - user will create it
+                console.log('No profile found, user can create one');
             }
         } catch (err) {
             console.error('Failed to fetch profile');
@@ -54,7 +57,16 @@ export default function SellerProfilePage() {
 
         try {
             const token = localStorage.getItem('token');
-            const method = profile.businessName ? 'PATCH' : 'POST';
+
+            // First, try to fetch the profile to see if it exists
+            const checkResponse = await fetch('/api/seller/profile', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            const profileExists = checkResponse.status !== 404;
+            const method = profileExists ? 'PATCH' : 'POST';
 
             const response = await fetch('/api/seller/profile', {
                 method,

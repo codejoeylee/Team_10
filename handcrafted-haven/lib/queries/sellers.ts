@@ -12,7 +12,16 @@ export async function createSellerProfile(data: CreateSellerProfile): Promise<Se
       ${data.specialty || null}, 
       ${data.imageUrl || null}
     )
-    RETURNING *
+    RETURNING 
+      id,
+      user_id as "userId",
+      business_name as "businessName",
+      bio,
+      location,
+      specialty,
+      image_url as "imageUrl",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
   `;
 
   return result.rows[0] as SellerProfile;
@@ -20,7 +29,19 @@ export async function createSellerProfile(data: CreateSellerProfile): Promise<Se
 
 export async function getSellerProfileByUserId(userId: string): Promise<SellerProfile | null> {
   const result = await sql`
-    SELECT * FROM seller_profiles WHERE user_id = ${userId} LIMIT 1
+    SELECT 
+      id,
+      user_id as "userId",
+      business_name as "businessName",
+      bio,
+      location,
+      specialty,
+      image_url as "imageUrl",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
+    FROM seller_profiles 
+    WHERE user_id = ${userId} 
+    LIMIT 1
   `;
 
   return (result.rows[0] as SellerProfile) || null;
@@ -28,7 +49,19 @@ export async function getSellerProfileByUserId(userId: string): Promise<SellerPr
 
 export async function getSellerProfileById(id: string): Promise<SellerProfile | null> {
   const result = await sql`
-    SELECT * FROM seller_profiles WHERE id = ${id} LIMIT 1
+    SELECT 
+      id,
+      user_id as "userId",
+      business_name as "businessName",
+      bio,
+      location,
+      specialty,
+      image_url as "imageUrl",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
+    FROM seller_profiles 
+    WHERE id = ${id} 
+    LIMIT 1
   `;
 
   return (result.rows[0] as SellerProfile) || null;
@@ -38,50 +71,54 @@ export async function updateSellerProfile(
   userId: string,
   data: Partial<CreateSellerProfile>
 ): Promise<SellerProfile | null> {
-  const setParts: string[] = [];
-  const values: any[] = [];
-  let paramCount = 1;
+  const updates: any = {};
 
-  if (data.businessName !== undefined) {
-    setParts.push(`business_name = $${paramCount++}`);
-    values.push(data.businessName);
-  }
-  if (data.bio !== undefined) {
-    setParts.push(`bio = $${paramCount++}`);
-    values.push(data.bio);
-  }
-  if (data.location !== undefined) {
-    setParts.push(`location = $${paramCount++}`);
-    values.push(data.location);
-  }
-  if (data.specialty !== undefined) {
-    setParts.push(`specialty = $${paramCount++}`);
-    values.push(data.specialty);
-  }
-  if (data.imageUrl !== undefined) {
-    setParts.push(`image_url = $${paramCount++}`);
-    values.push(data.imageUrl);
-  }
+  if (data.businessName !== undefined) updates.business_name = data.businessName;
+  if (data.bio !== undefined) updates.bio = data.bio;
+  if (data.location !== undefined) updates.location = data.location;
+  if (data.specialty !== undefined) updates.specialty = data.specialty;
+  if (data.imageUrl !== undefined) updates.image_url = data.imageUrl;
 
-  if (setParts.length === 0) return null;
+  if (Object.keys(updates).length === 0) return null;
 
-  setParts.push('updated_at = NOW()');
-  values.push(userId);
+  const result = await sql`
+    UPDATE seller_profiles 
+    SET 
+      business_name = COALESCE(${updates.business_name || null}, business_name),
+      bio = COALESCE(${updates.bio || null}, bio),
+      location = COALESCE(${updates.location || null}, location),
+      specialty = COALESCE(${updates.specialty || null}, specialty),
+      image_url = COALESCE(${updates.image_url || null}, image_url),
+      updated_at = NOW()
+    WHERE user_id = ${userId}
+    RETURNING 
+      id,
+      user_id as "userId",
+      business_name as "businessName",
+      bio,
+      location,
+      specialty,
+      image_url as "imageUrl",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
+  `;
 
-  const query = `
-        UPDATE seller_profiles 
-        SET ${setParts.join(', ')}
-        WHERE user_id = $${paramCount}
-        RETURNING *
-    `;
-
-  const result = await sql.query(query, values);
   return (result.rows[0] as SellerProfile) || null;
 }
 
 export async function getAllSellers(limit = 50, offset = 0): Promise<SellerProfile[]> {
   const result = await sql`
-    SELECT * FROM seller_profiles 
+    SELECT 
+      id,
+      user_id as "userId",
+      business_name as "businessName",
+      bio,
+      location,
+      specialty,
+      image_url as "imageUrl",
+      created_at as "createdAt",
+      updated_at as "updatedAt"
+    FROM seller_profiles 
     ORDER BY created_at DESC 
     LIMIT ${limit} OFFSET ${offset}
   `;
